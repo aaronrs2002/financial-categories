@@ -53,6 +53,7 @@
 <script>
     let categories = [];
     let expenseList = [];
+
     if (localStorage.getItem("expenseList")) {
         expenseList = JSON.parse(localStorage.getItem("expenseList"));
     }
@@ -68,61 +69,52 @@
 
 
     function buildAvailableCategories(categories) {
+        let categoryObj = [];
 
         let availableCategoriesHTML = "<option value='default'>Select category</option>";
-
         for (let i = 0; i < categories.length; i++) {
-
-            availableCategoriesHTML = availableCategoriesHTML + "<option value='" + categories[i] + "'>" + categories[i] + "</option>"
+            availableCategoriesHTML = availableCategoriesHTML + "<option value='" + categories[i] + "'>" + categories[i] + "</option>";
+            categoryObj.push({
+                categoryName: categories[i],
+                categoryTotal: 0
+            })
         }
 
+        for (let i = 0; i < expenseList.length; i++) {
+            for (let j = 0; j < categoryObj.length; j++) {
+                if (expenseList[i].category === categoryObj[j].categoryName) {
+                    categoryObj[j].categoryTotal = categoryObj[j].categoryTotal + Number(expenseList[i].amount);
+                }
+            }
+        }
+
+        console.log("JSON.stingify(categoryObj): " + JSON.stringify(categoryObj));
         document.querySelector("select[name='availableCategories']").innerHTML = availableCategoriesHTML;
     }
-
-
 
     function buildTotal() {
         let expenseTotal = 0;
         for (let i = 0; i < expenseList.length; i++) {
-
             expenseTotal = expenseTotal + Number(expenseList[i].amount);
             if (categories.indexOf(expenseList[i].category) === -1) {
                 categories.push(expenseList[i].category);
             }
-
         }
         buildAvailableCategories(categories);
         document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
-
     }
 
     function addExpense() {
-
-
         let expenseName = document.querySelector("input[name='expenseName']").value;
         let expenseAmount = document.querySelector("input[name='expenseAmount']").value;
         let expenseCategory = document.querySelector("input[name='expenseCategory']").value;
-
         expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory });
-
-
-
-
-
-
         buildTotal();
-
-
-
         document.querySelector("input[name='expenseName']").value = "";
         document.querySelector("input[name='expenseAmount']").value = "";
         document.querySelector("input[name='expenseCategory']").value = "";
-
         localStorage.setItem("expenseList", JSON.stringify(expenseList));
     }
-
-
-
     buildTotal();
 
 </script>
