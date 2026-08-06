@@ -7,6 +7,8 @@
     <title>Financial Catgories</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
 <body>
@@ -44,13 +46,126 @@
                 </div>
             </div>
 
-            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <div id="chart"></div>
+            </div>
         </div>
     </div>
 
 </body>
 
 <script>
+    let findHeight = 100;
+    let theLabels = [];
+
+    const width = window.innerWidth;
+    let legendWidth = 500;
+
+    if (width < 768) {
+        findHeight = 250;
+        legendWidth = 435;
+    } else {
+        findHeight = 100;
+
+    }
+
+
+
+    let currentChartData = {
+        series: [],
+        chart: {
+            type: 'donut',
+            total: 0, dataLabels: {
+                enabled: false,
+            },
+
+
+            chart: {
+                width: '100%',
+            },
+            legend: {
+                show: true,
+                showForSingleSeries: false,
+                showForNullSeries: true,
+                showForZeroSeries: true,
+                position: 'bottom',
+                horizontalAlign: 'left',
+                floating: false,
+                formatter: undefined,
+                inverseOrder: false,
+                width: legendWidth,
+                height: findHeight,
+                tooltipHoverFormatter: undefined,
+                customLegendItems: [],
+                offsetX: 15,
+                offsetY: 0,
+                labels: {
+                    colors: undefined,
+                    useSeriesColors: false
+                },
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    strokeColor: '#fff',
+                    fillColors: undefined,
+                    radius: 12,
+                    customHTML: undefined,
+                    onClick: undefined,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+                itemMargin: {
+                    horizontal: 2,
+                    vertical: 0
+                },
+                onItemClick: {
+                    toggleDataSeries: true
+                },
+                onItemHover: {
+                    highlightDataSeries: true
+                },
+            },
+            labels: theLabels,
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        position: 'bottom'
+                    }
+                }
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 300,
+                        horizontalAlign: 'left',
+                        offsetX: 0,
+                        offsetY: 0,
+
+                    },
+                    legend: {
+                        width: 300,
+                        position: 'bottom',
+                        horizontalAlign: 'left',
+                        offsetX: 0,
+                        offsetY: 0,
+                    }
+                }
+            }],
+            plotOptions: {
+                pie: {
+                    customScale: 1,
+                    labels: false
+                }
+            }
+
+        }
+    };
+
+
+
+    //end chart
     let categories = [];
     let expenseList = [];
 
@@ -90,6 +205,20 @@
 
         console.log("JSON.stingify(categoryObj): " + JSON.stringify(categoryObj));
         document.querySelector("select[name='availableCategories']").innerHTML = availableCategoriesHTML;
+
+
+        for (let i = 0; i < categoryObj.length; i++) {
+            currentChartData.series.push(categoryObj[i].categoryTotal)
+            theLabels.push(categoryObj[i].categoryName)
+        }
+
+        setTimeout(() => {
+            //  console.log("JSON.stringify(currentChartData): " + JSON.stringify(currentChartData));
+            document.querySelector("#chart").innerHTML = "";
+            var chart = new ApexCharts(document.querySelector("#chart"), currentChartData);
+            chart.render();
+        }, 1000);
+
     }
 
     function buildTotal() {
@@ -116,6 +245,14 @@
         localStorage.setItem("expenseList", JSON.stringify(expenseList));
     }
     buildTotal();
+
+
+
+
+
+
+
+
 
 </script>
 
