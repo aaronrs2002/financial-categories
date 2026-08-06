@@ -22,8 +22,12 @@
                                 </li>
                                 <li><label>Cost</label><input type="number" class="form-control" name="expenseAmount" />
                                 </li>
-                                <li><label>Category</label><input type="text" class="form-control"
-                                        name="expenseCategory" />
+
+                                <li><label>Category</label>
+
+                                    <select class="form-control" name="availableCategories"
+                                        onChange="fillCategoryField()"></select>
+                                    <input type="text" class="form-control" name="expenseCategory" />
                                 </li>
                                 <li><button class="form-control btn btn-success my-3" onClick="addExpense()">Add
                                         Expense</button></li>
@@ -47,36 +51,79 @@
 </body>
 
 <script>
-
+    let categories = [];
     let expenseList = [];
+    if (localStorage.getItem("expenseList")) {
+        expenseList = JSON.parse(localStorage.getItem("expenseList"));
+    }
 
+    function fillCategoryField() {
+
+        let whichCategory = document.querySelector("select[name='availableCategories']").value;
+        if (whichCategory === "default") {
+            return false;
+        }
+        document.querySelector("input[name='expenseCategory']").value = whichCategory;
+    }
+
+
+    function buildAvailableCategories(categories) {
+
+        let availableCategoriesHTML = "<option value='default'>Select category</option>";
+
+        for (let i = 0; i < categories.length; i++) {
+
+            availableCategoriesHTML = availableCategoriesHTML + "<option value='" + categories[i] + "'>" + categories[i] + "</option>"
+        }
+
+        document.querySelector("select[name='availableCategories']").innerHTML = availableCategoriesHTML;
+    }
+
+
+
+    function buildTotal() {
+        let expenseTotal = 0;
+        for (let i = 0; i < expenseList.length; i++) {
+
+            expenseTotal = expenseTotal + Number(expenseList[i].amount);
+            if (categories.indexOf(expenseList[i].category) === -1) {
+                categories.push(expenseList[i].category);
+            }
+
+        }
+        buildAvailableCategories(categories);
+        document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
+
+    }
 
     function addExpense() {
+
 
         let expenseName = document.querySelector("input[name='expenseName']").value;
         let expenseAmount = document.querySelector("input[name='expenseAmount']").value;
         let expenseCategory = document.querySelector("input[name='expenseCategory']").value;
 
         expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory });
-        let expenseTotal = 0;
-
-        for (let i = 0; i < expenseList.length; i++) {
-
-            expenseTotal = expenseTotal + Number(expenseList[i].amount);
-        }
 
 
 
-        document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
+
+
+
+        buildTotal();
+
+
 
         document.querySelector("input[name='expenseName']").value = "";
         document.querySelector("input[name='expenseAmount']").value = "";
         document.querySelector("input[name='expenseCategory']").value = "";
+
+        localStorage.setItem("expenseList", JSON.stringify(expenseList));
     }
 
 
 
-
+    buildTotal();
 
 </script>
 
