@@ -20,9 +20,10 @@
                             <ul class="list-unstyled">
                                 <li><label>Name</label><input type="text" class="form-control" name="expenseName" />
                                 </li>
-                                <li><label>Cost</label><input type="text" class="form-control" name="expenseAmount" />
+                                <li><label>Cost</label><input type="number" class="form-control" name="expenseAmount" />
                                 </li>
-                                <li><label>Cost</label><input type="text" class="form-control" name="expenseCategory" />
+                                <li><label>Category</label><input type="text" class="form-control"
+                                        name="expenseCategory" />
                                 </li>
                                 <li><button class="form-control btn btn-success my-3" onClick="addExpense()">Add
                                         Expense</button></li>
@@ -30,7 +31,7 @@
                                     <ul class="list-group-numbered" id="expenseListTarget"></ul>
                                 </li>
                                 <li><label>Total</label>
-                                    <div id="" expenseTotalTarget></div>
+                                    <div id="expenseTotalTarget"></div>
                                 </li>
 
                             </ul>
@@ -56,7 +57,21 @@
         let expenseAmount = document.querySelector("input[name='expenseAmount']").value;
         let expenseCategory = document.querySelector("input[name='expenseCategory']").value;
 
-        expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory })
+        expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory });
+        let expenseTotal = 0;
+
+        for (let i = 0; i < expenseList.length; i++) {
+
+            expenseTotal = expenseTotal + Number(expenseList[i].amount);
+        }
+
+
+
+        document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
+
+        document.querySelector("input[name='expenseName']").value = "";
+        document.querySelector("input[name='expenseAmount']").value = "";
+        document.querySelector("input[name='expenseCategory']").value = "";
     }
 
 
