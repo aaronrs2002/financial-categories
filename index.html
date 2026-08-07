@@ -5,8 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Financial Catgories</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://bootswatch.com/5/spacelab/bootstrap.css" rel="stylesheet" id="themedStyle">
+    <link href="css/style.css" rel="stylesheet" id="themedStyle">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/brands.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/solid.css" rel="stylesheet" />
+    <link href="https://raw.githubusercontent.com/aaronrs2002/2024-jwt-login-framework/main/client/css/style.css"
+        rel="stylesheet" />
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
@@ -182,6 +188,8 @@
         expenseList = JSON.parse(localStorage.getItem("expenseList"));
     }
 
+
+
     function fillCategoryField() {
 
         let whichCategory = document.querySelector("select[name='availableCategories']").value;
@@ -193,6 +201,8 @@
 
 
     function buildAvailableCategories(categories) {
+
+
         theLabels = [];
         currentChartData.series = [];
         let categoryObj = [];
@@ -230,45 +240,72 @@
         }, 1000);
 
     }
-
     function buildTotal() {
+
+        if (localStorage.getItem("expenseList")) {
+            expenseList = JSON.parse(localStorage.getItem("expenseList"));
+        }
+        console.log("JSON.stringify(expenseList)" + JSON.stringify(expenseList));
+
         let expenseTotal = 0;
         let expenseCategoriesListTargetHTML = "";
+
+        categories = [];
+
         for (let i = 0; i < expenseList.length; i++) {
             expenseTotal = expenseTotal + Number(expenseList[i].amount);
+            console.log("JSON.stringify(expenseList)" + JSON.stringify(expenseList));
+            console.log("categories: " + categories);
             if (categories.indexOf(expenseList[i].category) === -1) {
                 categories.push(expenseList[i].category);
-                expenseCategoriesListTargetHTML = expenseCategoriesListTargetHTML + `<li class="list-group-item list-group-item-action list-group-item-success">
-                    <label>${expenseList[i].category + " Expenses"}</label><ul class="list-group" id="${expenseList[i].category}Expenses"></ul></li>`;
+                console.log("We are building category HTML");
+
 
 
             }
+
+
+
+        }
+
+        for (let j = 0; j < categories.length; j++) {
+            if (!document.getElementById(categories + "Expenses")) {
+                expenseCategoriesListTargetHTML = expenseCategoriesListTargetHTML + `<li class="list-group-item list-group-item-action list-group-item-success">
+                    <label>${categories[j] + " Expenses"}</label><ul class="list-group" id="${categories[j]}Expenses"></ul></li>`;
+            }
+
+        }
+
+        console.log("categories2: " + categories);
+        buildAvailableCategories(categories);/*for select men--*/
+
+        document.getElementById("expenseCategoriesListTarget").innerHTML = expenseCategoriesListTargetHTML;
+
+
+
+
+
+
+        document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
+
+
+
+
+        for (let i = 0; i < expenseList.length; i++) {
+            for (let j = 0; j < categories.length; j++) {
+                expenseListHTML = document.getElementById(categories[j] + "Expenses").innerHTML;
+                if (categories[j] === expenseList[i].category) {
+                    expenseListHTML = expenseListHTML + `<li class="list-group-item list-group-item-action list-group-item-info"><i class="fas fa-trash cursor-pointer"onClick="deleteListItem(${i})"></i>$${expenseList[i].amount}:${expenseList[i].name}</li>`;
+                    document.getElementById(expenseList[i].category + "Expenses").innerHTML = expenseListHTML;
+                }
+            }
+
         }
 
 
 
 
 
-        buildAvailableCategories(categories);
-
-        document.getElementById("expenseCategoriesListTarget").innerHTML = expenseCategoriesListTargetHTML;
-
-
-        document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
-        setTimeout(() => {
-            for (let i = 0; i < expenseList.length; i++) {
-                for (let j = 0; j < categories.length; j++) {
-                    expenseListHTML = document.getElementById(categories[j] + "Expenses").innerHTML;
-                    if (categories[j] === expenseList[i].category) {
-                        expenseListHTML = expenseListHTML + `<li class="list-group-item list-group-item-action list-group-item-info">$${expenseList[i].amount}:${expenseList[i].name}</li>`;
-                        document.getElementById(expenseList[i].category + "Expenses").innerHTML = expenseListHTML;
-                    }
-                }
-
-            }
-
-
-        }, 1000);
 
 
 
@@ -279,11 +316,31 @@
         let expenseAmount = document.querySelector("input[name='expenseAmount']").value;
         let expenseCategory = document.querySelector("input[name='expenseCategory']").value;
         expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory });
-        buildTotal();
+
         document.querySelector("input[name='expenseName']").value = "";
         document.querySelector("input[name='expenseAmount']").value = "";
         document.querySelector("input[name='expenseCategory']").value = "";
         localStorage.setItem("expenseList", JSON.stringify(expenseList));
+
+        buildTotal();
+
+    }
+
+
+
+    function deleteListItem(itemNumber) {
+        tempExpenseList = []
+        for (let i = 0; i < expenseList.length; i++) {
+            if (i !== itemNumber) {
+                tempExpenseList.push(expenseList[i]);
+            }
+        }
+
+        expenseList = tempExpenseList;
+        localStorage.setItem("expenseList", JSON.stringify(expenseList));
+
+        buildTotal();
+
     }
     buildTotal();
 
