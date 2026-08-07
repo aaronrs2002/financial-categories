@@ -69,14 +69,14 @@
 
     }
 
-
-
     let currentChartData = {
         series: [],
+        labels: theLabels,
         chart: {
             type: 'donut',
-            total: 0, dataLabels: {
-                enabled: false,
+            total: 0,
+            dataLabels: {
+                enabled: true,
             },
 
 
@@ -156,7 +156,7 @@
             plotOptions: {
                 pie: {
                     customScale: 1,
-                    labels: false
+                    labels: true
                 }
             }
 
@@ -184,6 +184,8 @@
 
 
     function buildAvailableCategories(categories) {
+        theLabels = [];
+        currentChartData.series = [];
         let categoryObj = [];
 
         let availableCategoriesHTML = "<option value='default'>Select category</option>";
@@ -202,15 +204,14 @@
                 }
             }
         }
-
         console.log("JSON.stingify(categoryObj): " + JSON.stringify(categoryObj));
         document.querySelector("select[name='availableCategories']").innerHTML = availableCategoriesHTML;
-
 
         for (let i = 0; i < categoryObj.length; i++) {
             currentChartData.series.push(categoryObj[i].categoryTotal)
             theLabels.push(categoryObj[i].categoryName)
         }
+        currentChartData.labels = theLabels;
 
         setTimeout(() => {
             //  console.log("JSON.stringify(currentChartData): " + JSON.stringify(currentChartData));
