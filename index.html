@@ -333,9 +333,28 @@
     }
 
     function addExpense() {
+
+        [].forEach.call(document.querySelectorAll(".error"), (e) => {
+            e.classList.remove("error");
+        });
+
+        let validateFieldsList = ['expenseName', "expenseAmount", "expenseCategory"];
+
+        for (let i = 0; i < validateFieldsList.length; i++) {
+            let ckField = document.querySelector("input[name='" + validateFieldsList[i] + "']").value;
+            if (!document.querySelector("input[name='" + validateFieldsList[i] + "']").value) {
+                document.querySelector("input[name='" + validateFieldsList[i] + "']").classList.add("error");
+                return false;
+            }
+        }
+
+
+
         let expenseName = document.querySelector("input[name='expenseName']").value;
         let expenseAmount = document.querySelector("input[name='expenseAmount']").value;
         let expenseCategory = document.querySelector("input[name='expenseCategory']").value;
+
+
         expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory });
 
         document.querySelector("input[name='expenseName']").value = "";
