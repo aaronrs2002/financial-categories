@@ -298,30 +298,54 @@
                 if (categories[j] === amountList[i].category) {
 
 
-                    amountListHTML = amountListHTML + `<li class="list-group-item list-group-item-action list-group-item-info"><i class="fas fa-trash cursor-pointer"onClick="deleteListItem(${i})"></i>$${amountList[i].amount}:${amountList[i].name}</li>`;
+                    amountListHTML = amountListHTML + `<li class="list-group-item list-group-item-action list-group-item-info"><i class="fas fa-trash cursor-pointer"onClick="deleteListItem(${i})"></i>$${amountList[i].amount}:${amountList[i].name.replaceAll(" ", "-")}: <span data-${amountList[i].name.replaceAll(" ", "-")}percent></span></li>`;
                     document.getElementById(amountList[i].category.replaceAll(" ", "-") + "amounts").innerHTML = amountListHTML;
                     currentCategoryTotal = document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).innerHTML;
                     console.log("currentCategoryTotal: " + currentCategoryTotal);
+                    let itemPercent = 0;
+
                     if (currentCategoryTotal !== 'undefined') {
+
                         currentCategoryTotal = Number(currentCategoryTotal) + Number(amountList[i].amount);
+                        itemPercent = Number(currentCategoryTotal) + Number(amountList[i].amount);
                         document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).value = currentCategoryTotal;
                         document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).innerHTML = currentCategoryTotal;
+
                     }
 
 
                 }
+
+
             }
 
         }
 
+        setTimeout(() => {
+            for (let i = 0; i < amountList.length; i++) {
 
-        for (let i = 0; i < amountList.length; i++) {
+                console.log(`document.querySelector("span[data-" + amountList[i].category + "total]").innerHTML: ` + document.querySelector("span[data-" + amountList[i].category.replaceAll(" ", "-") + "total]").innerHTML);
+                let categoryTotal = document.querySelector("span[data-" + amountList[i].category.replaceAll(" ", "-") + "total]").innerHTML
 
 
 
 
+                try {
 
-        }
+                    if (amountList[i].name.replaceAll(" ", " - ") !== 'undefined') {
+                        console.log("amountList[i].name.replaceAll() : " + amountList[i].name.replaceAll(" ", "-"));
+                        console.log(`"span[data-${amountList[i].name.replaceAll(' ', '-')}percent].  length:"` + document.querySelector("span[data-" + amountList[i].name.replaceAll(' ', '-') + "percent]").length);
+
+                        document.querySelector("span[data-" + amountList[i].name.replaceAll(' ', '-') + "percent]").innerHTML = " " + ((Number(amountList[i].amount) / Number(categoryTotal)) * 100).toString().substring(0, ((Number(amountList[i].amount) / Number(categoryTotal)) * 100).toString().indexOf(".") + 4) + "%";
+                    }
+                } catch (error) {
+                    console.log("name: " + error);
+                }
+
+            }
+
+        }, 1000)
+
 
 
 
