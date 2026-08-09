@@ -26,27 +26,27 @@
                     <div class="card-body">
                         <div class="form-group">
                             <ul class="list-unstyled">
-                                <li><label>Name</label><input type="text" class="form-control" name="expenseName" />
+                                <li><label>Name</label><input type="text" class="form-control" name="amountName" />
                                 </li>
-                                <li><label>Cost</label><input type="number" class="form-control" name="expenseAmount" />
+                                <li><label>Cost</label><input type="number" class="form-control" name="amountAmount" />
                                 </li>
 
                                 <li><label>Category</label>
 
                                     <select class="form-control" name="availableCategories"
                                         onChange="fillCategoryField()"></select>
-                                    <input type="text" class="form-control" name="expenseCategory" />
+                                    <input type="text" class="form-control" name="amountCategory" />
                                 </li>
-                                <li><button class="form-control btn btn-success my-3" onClick="addExpense()">Add
-                                        Expense</button></li>
-                                <li><label>Expenses</label>
-                                    <ul class="list-group" id="expenseCategoriesListTarget"></ul>
+                                <li><button class="form-control btn btn-success my-3" onClick="addamount()">Add
+                                        amount</button></li>
+                                <li><label>amounts</label>
+                                    <ul class="list-group" id="amountCategoriesListTarget"></ul>
                                 </li>
                                 <li><label>Total</label>
-                                    <div id="expenseTotalTarget"></div>
+                                    <div id="amountTotalTarget"></div>
                                 </li>
                                 <li>
-                                    <ul class="list-unstyled" id="expenseListItemsTarget"></ul>
+                                    <ul class="list-unstyled" id="amountListItemsTarget"></ul>
                                 </li>
 
                             </ul>
@@ -182,10 +182,10 @@
 
     //end chart
     let categories = [];
-    let expenseList = [];
+    let amountList = [];
 
-    if (localStorage.getItem("expenseList")) {
-        expenseList = JSON.parse(localStorage.getItem("expenseList"));
+    if (localStorage.getItem("amountList")) {
+        amountList = JSON.parse(localStorage.getItem("amountList"));
     }
 
 
@@ -196,7 +196,7 @@
         if (whichCategory === "default") {
             return false;
         }
-        document.querySelector("input[name='expenseCategory']").value = whichCategory;
+        document.querySelector("input[name='amountCategory']").value = whichCategory;
     }
 
 
@@ -216,10 +216,10 @@
             })
         }
 
-        for (let i = 0; i < expenseList.length; i++) {
+        for (let i = 0; i < amountList.length; i++) {
             for (let j = 0; j < categoryObj.length; j++) {
-                if (expenseList[i].category === categoryObj[j].categoryName) {
-                    categoryObj[j].categoryTotal = categoryObj[j].categoryTotal + Number(expenseList[i].amount);
+                if (amountList[i].category === categoryObj[j].categoryName) {
+                    categoryObj[j].categoryTotal = categoryObj[j].categoryTotal + Number(amountList[i].amount);
                 }
             }
         }
@@ -242,22 +242,22 @@
     }
     function buildTotal() {
 
-        if (localStorage.getItem("expenseList")) {
-            expenseList = JSON.parse(localStorage.getItem("expenseList"));
+        if (localStorage.getItem("amountList")) {
+            amountList = JSON.parse(localStorage.getItem("amountList"));
         }
-        console.log("JSON.stringify(expenseList)" + JSON.stringify(expenseList));
+        console.log("JSON.stringify(amountList)" + JSON.stringify(amountList));
 
-        let expenseTotal = 0;
-        let expenseCategoriesListTargetHTML = "";
+        let amountTotal = 0;
+        let amountCategoriesListTargetHTML = "";
 
         categories = [];
 
-        for (let i = 0; i < expenseList.length; i++) {
-            expenseTotal = expenseTotal + Number(expenseList[i].amount);
-            console.log("JSON.stringify(expenseList)" + JSON.stringify(expenseList));
+        for (let i = 0; i < amountList.length; i++) {
+            amountTotal = amountTotal + Number(amountList[i].amount);
+            console.log("JSON.stringify(amountList)" + JSON.stringify(amountList));
             console.log("categories: " + categories);
-            if (categories.indexOf(expenseList[i].category) === -1) {
-                categories.push(expenseList[i].category);
+            if (categories.indexOf(amountList[i].category) === -1) {
+                categories.push(amountList[i].category);
                 console.log("We are building category HTML");
 
 
@@ -270,9 +270,9 @@
         }
 
         for (let j = 0; j < categories.length; j++) {
-            if (!document.getElementById(categories + "Expenses")) {
-                expenseCategoriesListTargetHTML = expenseCategoriesListTargetHTML + `<li class="list-group-item list-group-item-action list-group-item-success">
-                    <label>${categories[j]} expenses: $<span data-${categories[j].replaceAll(" ", "-")}total="0">0</span> total</label><ul class="list-group" id="${categories[j].replaceAll(" ", "-")}Expenses"></ul></li>`;
+            if (!document.getElementById(categories + "amounts")) {
+                amountCategoriesListTargetHTML = amountCategoriesListTargetHTML + `<li class="list-group-item list-group-item-action list-group-item-success">
+                    <label>${categories[j]}: $<span data-${categories[j].replaceAll(" ", "-")}total="0">0</span> total</label><ul class="list-group" id="${categories[j].replaceAll(" ", "-")}amounts"></ul></li>`;
             }
 
         }
@@ -280,30 +280,30 @@
         console.log("categories2: " + categories);
         buildAvailableCategories(categories);/*for select men--*/
 
-        document.getElementById("expenseCategoriesListTarget").innerHTML = expenseCategoriesListTargetHTML;
+        document.getElementById("amountCategoriesListTarget").innerHTML = amountCategoriesListTargetHTML;
 
 
 
 
 
 
-        document.querySelector("#expenseTotalTarget").innerHTML = "$" + expenseTotal;
+        document.querySelector("#amountTotalTarget").innerHTML = "$" + amountTotal;
 
         //span data-category="${categories[j]}-total"
 
 
-        for (let i = 0; i < expenseList.length; i++) {
+        for (let i = 0; i < amountList.length; i++) {
             for (let j = 0; j < categories.length; j++) {
-                expenseListHTML = document.getElementById(categories[j].replaceAll(" ", "-") + "Expenses").innerHTML;
-                if (categories[j] === expenseList[i].category) {
+                amountListHTML = document.getElementById(categories[j].replaceAll(" ", "-") + "amounts").innerHTML;
+                if (categories[j] === amountList[i].category) {
 
 
-                    expenseListHTML = expenseListHTML + `<li class="list-group-item list-group-item-action list-group-item-info"><i class="fas fa-trash cursor-pointer"onClick="deleteListItem(${i})"></i>$${expenseList[i].amount}:${expenseList[i].name}</li>`;
-                    document.getElementById(expenseList[i].category.replaceAll(" ", "-") + "Expenses").innerHTML = expenseListHTML;
+                    amountListHTML = amountListHTML + `<li class="list-group-item list-group-item-action list-group-item-info"><i class="fas fa-trash cursor-pointer"onClick="deleteListItem(${i})"></i>$${amountList[i].amount}:${amountList[i].name}</li>`;
+                    document.getElementById(amountList[i].category.replaceAll(" ", "-") + "amounts").innerHTML = amountListHTML;
                     currentCategoryTotal = document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).innerHTML;
                     console.log("currentCategoryTotal: " + currentCategoryTotal);
                     if (currentCategoryTotal !== 'undefined') {
-                        currentCategoryTotal = Number(currentCategoryTotal) + Number(expenseList[i].amount);
+                        currentCategoryTotal = Number(currentCategoryTotal) + Number(amountList[i].amount);
                         document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).value = currentCategoryTotal;
                         document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).innerHTML = currentCategoryTotal;
                     }
@@ -315,7 +315,7 @@
         }
 
 
-        for (let i = 0; i < expenseList.length; i++) {
+        for (let i = 0; i < amountList.length; i++) {
 
 
 
@@ -332,13 +332,13 @@
 
     }
 
-    function addExpense() {
+    function addamount() {
 
         [].forEach.call(document.querySelectorAll(".error"), (e) => {
             e.classList.remove("error");
         });
 
-        let validateFieldsList = ['expenseName', "expenseAmount", "expenseCategory"];
+        let validateFieldsList = ['amountName', "amountAmount", "amountCategory"];
 
         for (let i = 0; i < validateFieldsList.length; i++) {
             let ckField = document.querySelector("input[name='" + validateFieldsList[i] + "']").value;
@@ -350,17 +350,17 @@
 
 
 
-        let expenseName = document.querySelector("input[name='expenseName']").value;
-        let expenseAmount = document.querySelector("input[name='expenseAmount']").value;
-        let expenseCategory = document.querySelector("input[name='expenseCategory']").value;
+        let amountName = document.querySelector("input[name='amountName']").value;
+        let amountAmount = document.querySelector("input[name='amountAmount']").value;
+        let amountCategory = document.querySelector("input[name='amountCategory']").value;
 
 
-        expenseList.push({ name: expenseName, amount: expenseAmount, category: expenseCategory });
+        amountList.push({ name: amountName, amount: amountAmount, category: amountCategory });
 
-        document.querySelector("input[name='expenseName']").value = "";
-        document.querySelector("input[name='expenseAmount']").value = "";
-        document.querySelector("input[name='expenseCategory']").value = "";
-        localStorage.setItem("expenseList", JSON.stringify(expenseList));
+        document.querySelector("input[name='amountName']").value = "";
+        document.querySelector("input[name='amountAmount']").value = "";
+        document.querySelector("input[name='amountCategory']").value = "";
+        localStorage.setItem("amountList", JSON.stringify(amountList));
 
         buildTotal();
 
@@ -369,15 +369,15 @@
 
 
     function deleteListItem(itemNumber) {
-        tempExpenseList = []
-        for (let i = 0; i < expenseList.length; i++) {
+        tempamountList = []
+        for (let i = 0; i < amountList.length; i++) {
             if (i !== itemNumber) {
-                tempExpenseList.push(expenseList[i]);
+                tempamountList.push(amountList[i]);
             }
         }
 
-        expenseList = tempExpenseList;
-        localStorage.setItem("expenseList", JSON.stringify(expenseList));
+        amountList = tempamountList;
+        localStorage.setItem("amountList", JSON.stringify(amountList));
 
         buildTotal();
 
