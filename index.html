@@ -22,9 +22,23 @@
 
     <link rel="stylesheet" href="https://aaronrs2002.github.io/black-jack/css/animate.min.css" />
 
-    <link href="https://aaronrs2002.github.io/black-jack/css/shared.css" rel="stylesheet">
+    <link href="https://aaronrs2002.github.io/black-jack/css/shared.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://aaronrs2002.github.io/task-master/css/style.css" />
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" />
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJWFFXF8G0"></script>
+    <script>
+        const urlStr = window.location.href;
+        if (urlStr.indexOf("3000") !== -1 || urlStr.indexOf("exclude") !== -1) {
+            console.log("Not running GA");
+        } else {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-JJWFFXF8G0');
+        }
+    </script>
 
 </head>
 
@@ -69,9 +83,11 @@
                     <div class="card-body">
                         <div class="form-group">
                             <ul class="list-unstyled">
-                                <li><label>Name</label><input type="text" class="form-control" name="amountName" />
+                                <li><label>Name</label><input type="text" class="form-control" name="amountName"
+                                        placeholder="Letters Only XXXXX XXXXX" />
                                 </li>
-                                <li><label>Cost</label><input type="number" class="form-control" name="amountAmount" />
+                                <li><label>Cost</label><input type="number" class="form-control" name="amountAmount"
+                                        placeholder="Numbers Only 12345678910.00" />
                                 </li>
 
                                 <li><label>Category</label>
