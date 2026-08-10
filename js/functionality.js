@@ -339,6 +339,80 @@ buildTotal();
 
 
 
+/*START DOWNLOAD JS*********************************************************/
 
+
+function downloadData() {
+    let tempData = [];
+    if (localStorage.getItem("amountList")) {
+        tempData = JSON.parse(localStorage.getItem("amountList"));
+    }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(tempData, null, 2)], {
+        type: 'application/json'
+    }));
+    a.setAttribute("download", "financial-categories.json");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+
+//START FILE READER
+const fileReader = new FileReader();
+let file;
+function handleOnChange(event) {
+    if (event.target.files[0]) {
+        file = event.target.files[0];
+        console.log("event.target.files[0]: " + JSON.stringify(event.target.files[0]));
+        document.querySelector("#fileUpload").classList.remove("hide");
+        document.querySelector("#fileMerge").classList.remove("hide");
+        globalAlert("alert-warning", `File selected. Select if you want to merge  with current data or not.`);
+    } else {
+        document.querySelector("#fileUpload").classList.add("hide");
+        document.querySelector("#fileMerge").classList.add("hide");
+    }
+};
+function handleOnSubmit(event, type, merge) {
+    event.preventDefault();
+
+    if (file) {
+        fileReader.onload = function (event) {
+            const tempObj = event.target.result;
+            if (type === "json") {
+
+                console.log("(typeof tempObj): " + (typeof tempObj) + " - JSON.stringify(tempObj): " + JSON.stringify(tempObj))
+
+                if (merge === "default") {
+                    // localStorage.setItem("customDictionary", tempObj);    
+                    localStorage.setItem("amountList", tempObj);
+                    // loadList();
+                    buildTotal();
+
+                } else {
+                    let tempItems = [...JSON.parse(localStorage.getItem("financial-categories")), ...JSON.parse(tempObj)];
+
+
+                    localStorage.setItem("amountList", JSON.stringify(tempItems));
+
+                    //loadList();
+                    buildTotal();
+
+
+                }
+            }
+            else {
+                console.log("That wasn't json.")
+            }
+        };
+        fileReader.readAsText(file);
+    }
+    document.querySelector("input[type='file']").value = "";
+    document.querySelector("#fileUpload").classList.add("hide");
+    document.querySelector("#fileMerge").classList.add("hide");
+    //toggleEdit();
+
+    globalAlert("alert-success", "Your file was uploaded. The next word should be one you uploaded.");
+};
 
 

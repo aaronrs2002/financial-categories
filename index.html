@@ -54,7 +54,7 @@
                     onClick="window.location='https://aaronrs2002.github.io/financial-categories/';">Analyze Your
                     Finances by Catgory</button>
                 <button class="btn btn-info " type="button"
-                    onClick="window.location='https://aaronrs2002.github.io/budget-app/';">Compare Revenu vs
+                    onClick="window.location='https://aaronrs2002.github.io/budget-app/';">Revenue vs
                     Income</button>
 
 
@@ -105,6 +105,49 @@
                     </li>
 
                 </ul>
+
+                <hr />
+
+                <div>
+
+                    <div class="col-md-12">
+                        <div class="d-grid gap-2  py-2">
+                            <button class="btn btn-light " onClick="javascript:downloadData();"><i
+                                    class="fas fa-file-download"></i>
+                                Download</button>
+                        </div>
+                    </div>
+                    <div class="col-md-12 py-2">
+                        <div class="d-grid gap-2">
+
+
+
+                            <label class="custom-file-upload btn btn-light">
+                                <input type="file" name="importFile" accept=".json"
+                                    onChange="javascript:handleOnChange(event)" />
+                                <i class="fa fa-cloud-upload"></i> Select a "financial-categories.json" file to upload
+                            </label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="d-grid gap-2  py-2">
+                            <button id="fileUpload" class="btn btn-primary hide"
+                                onClick="javascript:handleOnSubmit(event, 'json','default')"><i
+                                    class="fas fa-file-upload"></i>
+                                Upload New Data</button>
+                        </div>
+                        <div class="d-grid gap-2  py-2">
+                            <button id="fileMerge" class="btn btn-warning hide"
+                                onClick="javascript:handleOnSubmit(event, 'json','merge')"><i
+                                    class="fas fa-file-upload"></i>
+                                Merge with current data</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
 
             </div>
         </div>
