@@ -146,15 +146,22 @@ function buildAvailableCategories(categories) {
             categoryTotal: 0
         })
     }
-
-    for (let i = 0; i < amountList.length; i++) {
-        for (let j = 0; j < categoryObj.length; j++) {
-            if (amountList[i].category === categoryObj[j].categoryName) {
-                categoryObj[j].categoryTotal = categoryObj[j].categoryTotal + Number(amountList[i].amount);
+    try {
+        if (amountList.length) {
+            for (let i = 0; i < amountList.length; i++) {
+                for (let j = 0; j < categoryObj.length; j++) {
+                    if (amountList[i].category === categoryObj[j].categoryName) {
+                        categoryObj[j].categoryTotal = categoryObj[j].categoryTotal + Number(amountList[i].amount);
+                    }
+                }
             }
         }
     }
-    console.log("JSON.stingify(categoryObj): " + JSON.stringify(categoryObj));
+    catch (error) {
+        globalAlert("alert-danger", "There is no data in this application: " + error);
+        return false;
+    }
+
     document.querySelector("select[name='availableCategories']").innerHTML = availableCategoriesHTML;
 
     for (let i = 0; i < categoryObj.length; i++) {
@@ -164,7 +171,7 @@ function buildAvailableCategories(categories) {
     currentChartData.labels = theLabels;
 
     setTimeout(() => {
-        //  console.log("JSON.stringify(currentChartData): " + JSON.stringify(currentChartData));
+
         document.querySelector("#chart").innerHTML = "";
         var chart = new ApexCharts(document.querySelector("#chart"), currentChartData);
         chart.render();
@@ -179,7 +186,6 @@ function buildTotal() {
     else {
         amountList = [];
     }
-    console.log("JSON.stringify(amountList)" + JSON.stringify(amountList));
 
     let amountTotal = 0;
     let amountCategoriesListTargetHTML = "";
@@ -188,13 +194,9 @@ function buildTotal() {
 
     for (let i = 0; i < amountList.length; i++) {
         amountTotal = amountTotal + Number(amountList[i].amount);
-        console.log("JSON.stringify(amountList)" + JSON.stringify(amountList));
-        console.log("categories: " + categories);
+
         if (categories.indexOf(amountList[i].category) === -1) {
             categories.push(amountList[i].category);
-            console.log("We are building category HTML");
-
-
 
         }
 
@@ -206,23 +208,13 @@ function buildTotal() {
     buildAvailableCategories(categories);/*for select men--*/
 
     for (let j = 0; j < categories.length; j++) {
-        if (!document.getElementById(categories + "amounts")) {
-            amountCategoriesListTargetHTML = amountCategoriesListTargetHTML + `<li class="list-group-item list-group-item-action list-group-item-success">
+        amountCategoriesListTargetHTML = amountCategoriesListTargetHTML + `<li class="list-group-item list-group-item-action list-group-item-success">
                     <label>${categories[j]}: $<span data-${categories[j].replaceAll(" ", "-")}total="0">0</span> total</label><ul class="list-group" id="${categories[j].replaceAll(" ", "-")}amounts"></ul></li>`;
-        }
 
     }
 
-    console.log("categories2: " + categories);
-
 
     document.getElementById("amountCategoriesListTarget").innerHTML = amountCategoriesListTargetHTML;
-
-
-
-
-
-
     document.querySelector("#amountTotalTarget").innerHTML = "$" + amountTotal;
 
     //span data-category="${categories[j]}-total"
@@ -230,14 +222,21 @@ function buildTotal() {
 
     for (let i = 0; i < amountList.length; i++) {
         for (let j = 0; j < categories.length; j++) {
-            amountListHTML = document.getElementById(categories[j].replaceAll(" ", "-") + "amounts").innerHTML;
+            let amountListHTML = "";
+            if (document.getElementById(categories[j].replaceAll(" ", "-") + "amounts")) {
+                amountListHTML = document.getElementById(categories[j].replaceAll(" ", "-") + "amounts").innerHTML;
+            }
             if (categories[j] === amountList[i].category) {
 
 
                 amountListHTML = amountListHTML + `<li class="list-group-item list-group-item-action list-group-item-info"><i class="fas fa-trash cursor-pointer"onClick="deleteListItem(${i})"></i>$${amountList[i].amount}:${amountList[i].name.replaceAll(" ", "-")}: <span data-${amountList[i].name.replaceAll(" ", "-")}percent></span></li>`;
-                document.getElementById(amountList[i].category.replaceAll(" ", "-") + "amounts").innerHTML = amountListHTML;
+
+                if (document.getElementById(categories[j].replaceAll(" ", "-") + "amounts")) {
+                    document.getElementById(amountList[i].category.replaceAll(" ", "-") + "amounts").innerHTML = amountListHTML;
+                }
+
                 currentCategoryTotal = document.querySelector(`span[data-${categories[j].replaceAll(" ", "-")}total]`).innerHTML;
-                console.log("currentCategoryTotal: " + currentCategoryTotal);
+
                 let itemPercent = 0;
 
                 if (currentCategoryTotal !== 'undefined') {
@@ -261,19 +260,11 @@ function buildTotal() {
 
     setTimeout(() => {
         for (let i = 0; i < amountList.length; i++) {
-
-            console.log(`document.querySelector("span[data-" + amountList[i].category + "total]").innerHTML: ` + document.querySelector("span[data-" + amountList[i].category.replaceAll(" ", "-") + "total]").innerHTML);
             let categoryTotal = document.querySelector("span[data-" + amountList[i].category.replaceAll(" ", "-") + "total]").innerHTML
-
-
-
 
             try {
 
                 if (amountList[i].name.replaceAll(" ", " - ") !== 'undefined') {
-                    console.log("amountList[i].name.replaceAll() : " + amountList[i].name.replaceAll(" ", "-"));
-                    console.log(`"span[data-${amountList[i].name.replaceAll(' ', '-')}percent].  length:"` + document.querySelector("span[data-" + amountList[i].name.replaceAll(' ', '-') + "percent]").length);
-
                     document.querySelector("span[data-" + amountList[i].name.replaceAll(' ', '-') + "percent]").innerHTML = " " + ((Number(amountList[i].amount) / Number(categoryTotal)) * 100).toString().substring(0, ((Number(amountList[i].amount) / Number(categoryTotal)) * 100).toString().indexOf(".") + 4) + "%";
                 }
             } catch (error) {
@@ -282,7 +273,7 @@ function buildTotal() {
 
         }
 
-    }, 1000)
+    }, 2000)
 
 
 
@@ -315,10 +306,6 @@ function addamount() {
     let amountName = document.querySelector("input[name='amountName']").value;
     let amountAmount = document.querySelector("input[name='amountAmount']").value;
     let amountCategory = document.querySelector("input[name='amountCategory']").value;
-
-    console.log("amountList: " + amountList)
-
-
 
     if (!amountList) {
         amountList = [];
@@ -365,8 +352,9 @@ function clearData() {
     document.getElementById("amountTotalTarget").innerHTML = "";
     globalAlert("alert-warning", "No Data");
     toggle("clearBt");
+    buildAvailableCategories([])
 
-    return false;
+    // return false;
 
 }
 
@@ -415,7 +403,6 @@ function handleOnSubmit(event, type, merge) {
             const tempObj = event.target.result;
             if (type === "json") {
 
-                console.log("(typeof tempObj): " + (typeof tempObj) + " - JSON.stringify(tempObj): " + JSON.stringify(tempObj))
 
                 if (merge === "default") {
                     // localStorage.setItem("customDictionary", tempObj);    
@@ -436,7 +423,7 @@ function handleOnSubmit(event, type, merge) {
                 }
             }
             else {
-                console.log("That wasn't json.")
+                console.log("That wasn't the correct json format.")
             }
         };
         fileReader.readAsText(file);

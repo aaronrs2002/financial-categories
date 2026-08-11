@@ -1,7 +1,4 @@
-/*.cursor-pointer {
-    cursor: pointer;
-}
-
+/*
 .error {
     border-color: red;
     border-width: 1px;
@@ -9,4 +6,8 @@
 
 nav+.container {
     margin-top: 2rem;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
