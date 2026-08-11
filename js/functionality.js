@@ -118,7 +118,6 @@ if (localStorage.getItem("amountList")) {
 }
 
 
-
 function fillCategoryField() {
 
     let whichCategory = document.querySelector("select[name='availableCategories']").value;
@@ -200,6 +199,8 @@ function buildTotal() {
 
 
     }
+
+
 
     for (let j = 0; j < categories.length; j++) {
         if (!document.getElementById(categories + "amounts")) {
@@ -338,8 +339,23 @@ function deleteListItem(itemNumber) {
     buildTotal();
 
 }
-buildTotal();
 
+
+
+function clearData() {
+
+    categories = [];
+    amountList = [];
+    amountList = localStorage.removeItem("amountList");
+    document.getElementById("chart").innerHTML = "";
+    document.getElementById("amountCategoriesListTarget").innerHTML = "";
+    globalAlert("alert-warning", "No Data");
+    toggle("clearBt");
+    return false;
+
+}
+
+buildTotal();
 
 
 /*START DOWNLOAD JS*********************************************************/

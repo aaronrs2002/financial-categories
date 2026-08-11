@@ -84,10 +84,10 @@
                         <div class="form-group">
                             <ul class="list-unstyled">
                                 <li><label>Name</label><input type="text" class="form-control" name="amountName"
-                                        placeholder="Letters Only XXXXX XXXXX" />
+                                        placeholder="Please use only letters from A to Z (spaces allowed)" />
                                 </li>
                                 <li><label>Cost</label><input type="number" class="form-control" name="amountAmount"
-                                        placeholder="Numbers Only 12345678910.00" />
+                                        placeholder="Numbers Only (example: 910.00)" />
                                 </li>
 
                                 <li><label>Category</label>
@@ -125,6 +125,23 @@
                 <hr />
 
                 <div>
+
+                    <div class="col-md-12">
+                        <button class="btn btn-danger form-control" data-toggle="clearBt"
+                            onClick="toggle('clearData')">Clear Data</button>
+                        <div data-toggle="clearData" class="hide ">
+                            <div class="list-group-item list-group-item-warning p-3">
+
+                                <p>Are you sure you want to delete all your data?</p>
+                                <button class="btn btn-secondary p-2" onclick="toggle('clearBt')">No</button>
+                                <button class="btn btn-danger p-2" onclick="clearData()">Yes</button>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
 
                     <div class="col-md-12">
                         <div class="d-grid gap-2  py-2">
