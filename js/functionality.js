@@ -176,6 +176,9 @@ function buildTotal() {
     if (localStorage.getItem("amountList")) {
         amountList = JSON.parse(localStorage.getItem("amountList"));
     }
+    else {
+        amountList = [];
+    }
     console.log("JSON.stringify(amountList)" + JSON.stringify(amountList));
 
     let amountTotal = 0;
@@ -200,7 +203,7 @@ function buildTotal() {
 
     }
 
-
+    buildAvailableCategories(categories);/*for select men--*/
 
     for (let j = 0; j < categories.length; j++) {
         if (!document.getElementById(categories + "amounts")) {
@@ -211,7 +214,7 @@ function buildTotal() {
     }
 
     console.log("categories2: " + categories);
-    buildAvailableCategories(categories);/*for select men--*/
+
 
     document.getElementById("amountCategoriesListTarget").innerHTML = amountCategoriesListTargetHTML;
 
@@ -253,6 +256,8 @@ function buildTotal() {
         }
 
     }
+
+
 
     setTimeout(() => {
         for (let i = 0; i < amountList.length; i++) {
@@ -311,7 +316,13 @@ function addamount() {
     let amountAmount = document.querySelector("input[name='amountAmount']").value;
     let amountCategory = document.querySelector("input[name='amountCategory']").value;
 
+    console.log("amountList: " + amountList)
 
+
+
+    if (!amountList) {
+        amountList = [];
+    }
     amountList.push({ name: amountName, amount: amountAmount, category: amountCategory });
 
     document.querySelector("input[name='amountName']").value = "";
@@ -349,8 +360,12 @@ function clearData() {
     amountList = localStorage.removeItem("amountList");
     document.getElementById("chart").innerHTML = "";
     document.getElementById("amountCategoriesListTarget").innerHTML = "";
+    document.querySelector("select[name='availableCategories']").innerHTML = "";
+    document.querySelector("select[name='availableCategories']").classList.add("hide");
+    document.getElementById("amountTotalTarget").innerHTML = "";
     globalAlert("alert-warning", "No Data");
     toggle("clearBt");
+
     return false;
 
 }
