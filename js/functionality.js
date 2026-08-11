@@ -138,6 +138,9 @@ function buildAvailableCategories(categories) {
 
     let availableCategoriesHTML = "<option value='default'>Select category</option>";
     for (let i = 0; i < categories.length; i++) {
+        if (i === 0) {
+            document.querySelector("select[name='availableCategories']").classList.remove("hide");
+        }
         availableCategoriesHTML = availableCategoriesHTML + "<option value='" + categories[i] + "'>" + categories[i] + "</option>";
         categoryObj.push({
             categoryName: categories[i],
