@@ -63,7 +63,7 @@
     <div class="container">
         <div class="row">
 
-            <div class="btn-group">
+            <div class="btn-group px-0">
 
                 <button class="btn btn-info active" type="button"
                     onClick="window.location='https://aaronrs2002.github.io/financial-categories/';">Analyze Your
@@ -76,12 +76,12 @@
             </div>
 
 
+            <div class="card  mx-0">
+                <div class="row ">
+
+                    <div class="col-md-6 ">
 
 
-            <div class="col-md-6">
-
-                <div class="card">
-                    <div class="card-body">
                         <div class="col-md-12">
                             <h1>Analyze Your Finances by Catgory</h1>
                             <small><i>Input an item name. Then the amount. After that, input a category. From there, add
@@ -118,78 +118,80 @@
 
                             </ul>
                         </div>
+
                     </div>
-                </div>
-            </div>
 
-            <div class="col-md-6">
-                <ul class="list-unstyled">
-                    <li>
-                        <div id="chart"></div>
-                    </li>
+                    <div class="col-md-6 ">
+                        <ul class="list-unstyled">
+                            <li>
+                                <div id="chart"></div>
+                            </li>
 
-                </ul>
+                        </ul>
 
-                <hr />
+                        <hr />
 
-                <div>
+                        <div>
 
-                    <div class="col-md-12">
-                        <button class="btn btn-danger form-control" data-toggle="clearBt"
-                            onClick="toggle('clearData')">Clear Data</button>
-                        <div data-toggle="clearData" class="hide ">
-                            <div class="list-group-item list-group-item-warning p-3">
+                            <div class="col-md-12">
+                                <button class="btn btn-danger form-control" data-toggle="clearBt"
+                                    onClick="toggle('clearData')">Clear Data</button>
+                                <div data-toggle="clearData" class="hide ">
+                                    <div class="list-group-item list-group-item-warning p-3">
 
-                                <p>Are you sure you want to delete all your category data?</p>
-                                <button class="btn btn-secondary p-2" onclick="toggle('clearBt')">No</button>
-                                <button class="btn btn-danger p-2" onclick="clearData()">Yes</button>
+                                        <p>Are you sure you want to delete all your category data?</p>
+                                        <button class="btn btn-secondary p-2" onclick="toggle('clearBt')">No</button>
+                                        <button class="btn btn-danger p-2" onclick="clearData()">Yes</button>
+                                    </div>
+
+                                </div>
+
+
+
                             </div>
 
-                        </div>
+                            <div class="col-md-12">
+                                <div class="d-grid gap-2  py-2">
+                                    <button class="btn btn-light " onClick="javascript:downloadData();"><i
+                                            class="fas fa-file-download"></i>
+                                        Download</button>
+                                </div>
+                            </div>
+                            <div class="col-md-12 py-2">
+                                <div class="d-grid gap-2">
 
 
 
-                    </div>
+                                    <label class="custom-file-upload btn btn-light">
+                                        <input type="file" name="importFile" accept=".json"
+                                            onChange="javascript:handleOnChange(event)" />
+                                        <i class="fa fa-cloud-upload"></i> Select a "financial-categories.json" file to
+                                        upload
+                                    </label>
 
-                    <div class="col-md-12">
-                        <div class="d-grid gap-2  py-2">
-                            <button class="btn btn-light " onClick="javascript:downloadData();"><i
-                                    class="fas fa-file-download"></i>
-                                Download</button>
-                        </div>
-                    </div>
-                    <div class="col-md-12 py-2">
-                        <div class="d-grid gap-2">
-
-
-
-                            <label class="custom-file-upload btn btn-light">
-                                <input type="file" name="importFile" accept=".json"
-                                    onChange="javascript:handleOnChange(event)" />
-                                <i class="fa fa-cloud-upload"></i> Select a "financial-categories.json" file to upload
-                            </label>
-
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="d-grid gap-2  py-2">
-                            <button id="fileUpload" class="btn btn-primary hide"
-                                onClick="javascript:handleOnSubmit(event, 'json','default')"><i
-                                    class="fas fa-file-upload"></i>
-                                Upload New Data</button>
-                        </div>
-                        <!--  <div class="d-grid gap-2  py-2">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-grid gap-2  py-2">
+                                    <button id="fileUpload" class="btn btn-primary hide"
+                                        onClick="javascript:handleOnSubmit(event, 'json','default')"><i
+                                            class="fas fa-file-upload"></i>
+                                        Upload New Data</button>
+                                </div>
+                                <!--  <div class="d-grid gap-2  py-2">
                             <button id="fileMerge" class="btn btn-warning hide"
                                 onClick="javascript:handleOnSubmit(event, 'json','merge')"><i
                                     class="fas fa-file-upload"></i>
                                 Merge with current data</button>
                         </div>-->
+                            </div>
+
+
+
+                        </div>
+
                     </div>
-
-
-
                 </div>
-
             </div>
         </div>
     </div>
