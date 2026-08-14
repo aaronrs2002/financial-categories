@@ -358,7 +358,16 @@ function clearData() {
 
 }
 
+
+
+
+
 buildTotal();
+
+
+
+
+
 
 
 /*START DOWNLOAD JS*********************************************************/
